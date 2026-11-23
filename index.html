@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Year 7 Maths Entrance Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf7ee;--card:#fff;--ink:#1d2b3a;--mute:#5c6b7a;--acc:#e4572e;--line:#e3dccb;--ok:#1f9d55;--bad:#d62839;--fill:#bfe3f2}
+@media (prefers-color-scheme:dark){:root{--bg:#141c26;--card:#1d2836;--ink:#eef2f6;--mute:#9fb0c0;--acc:#ff8a5c;--line:#33414f;--ok:#4cd08a;--bad:#ff6b78;--fill:#2f5d78}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 1rem/1.5 'Nunito',system-ui,sans-serif}
+main{max-width:780px;margin:0 auto;padding:1.5rem 1rem 3rem}
+h1{font:900 clamp(1.8rem,6vw,2.6rem) 'Fraunces',Georgia,serif;margin:.2rem 0}
+h1 span{color:var(--acc)}
+.sub{color:var(--mute);margin:0 0 1rem}
+#prog{position:sticky;top:0;z-index:5;background:var(--bg);padding:.5rem 0;border-bottom:2px solid var(--line);font-weight:800;display:flex;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.q{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:1rem 1.1rem;margin:1rem 0}
+.tag{font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.q p{margin:.3rem 0 .5rem}
+.n{display:inline-block;background:var(--acc);color:#fff;font-weight:800;border-radius:50%;width:1.9rem;height:1.9rem;text-align:center;line-height:1.9rem;margin-right:.5rem}
+svg{display:block;margin:.4rem auto;max-width:100%;height:auto}
+.s{fill:var(--fill);stroke:var(--ink);stroke-width:2}
+.ln{stroke:var(--ink);stroke-width:2;fill:none}
+.g{stroke:var(--line);stroke-width:1}
+text{font:800 13px 'Nunito',sans-serif;fill:var(--ink)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:.5rem;margin-top:.6rem}
+.opts button{display:flex;align-items:center;justify-content:center;gap:.4rem;font:800 1rem 'Nunito',sans-serif;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:10px;padding:.55rem .4rem;cursor:pointer;transition:.2s}
+.opts button b{color:var(--acc)}
+.opts button:hover{border-color:var(--acc);transform:translateY(-2px)}
+.opts button.sel{border-color:var(--acc);background:rgba(228,87,46,.12)}
+.opts button.ok{border-color:var(--ok);background:rgba(31,157,85,.15)}
+.opts button.no{border-color:var(--bad);background:rgba(214,40,57,.12)}
+.w{display:none;margin-top:.7rem;font-size:.92rem;color:var(--mute)}
+.chk .w{display:block}
+.bar{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.act{font:800 1rem 'Nunito',sans-serif;border:0;border-radius:10px;padding:.7rem 1.4rem;cursor:pointer;background:var(--acc);color:#fff;transition:.2s}
+.act:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.act.o{background:transparent;color:var(--ink);border:2px solid var(--line)}
+#res{font:900 1.1rem 'Fraunces',Georgia,serif}
+</style>
+</head>
+<body>
+<main>
+  <h1>Year 7 <span>Maths</span> Entrance Practice</h1>
+  <p class="sub">25 multiple choice questions modelled on Year 7 maths entrance assessments for British curriculum schools in Lagos. Year 6 content with some stretch. Diagrams are not drawn to scale.</p>
+  <div id="prog"><span id="cnt">Answered: 0 / 25</span><span id="res"></span></div>
+  <div id="list"></div>
+  <div class="bar">
+    <button class="act" id="chk">Check answers</button>
+    <button class="act o" id="rst">Reset</button>
+  </div>
+</main>
+<script>
+/* ---------- Image helpers (inline SVG, no image files needed) ---------- */
+const barChart=()=>{const d=[['Mon',4],['Tue',7],['Wed',3],['Thu',6]];let s='<svg viewBox="0 0 300 200" width="320" role="img" aria-label="Bar chart of books read each day"><text x="150" y="14" text-anchor="middle">Books read in a week</text>';
+ for(let v=0;v<=8;v+=2){const y=170-v*18;s+=`<line class="g" x1="40" x2="280" y1="${y}" y2="${y}"/><text x="30" y="${y+4}" text-anchor="end">${v}</text>`}
+ d.forEach((b,i)=>{const x=55+i*58,h=b[1]*18;s+=`<rect class="s" x="${x}" y="${170-h}" width="40" height="${h}"/><text x="${x+20}" y="188" text-anchor="middle">${b[0]}</text>`});return s+'</svg>'};
+const triangle=()=>`<svg viewBox="0 0 260 150" width="280" role="img" aria-label="Triangle with angles 48 and 67 degrees"><polygon class="s" points="50,130 210,130 158.7,9.2"/><text x="82" y="122">48°</text><text x="176" y="122">67°</text><text x="153" y="38">x</text></svg>`;
+const lshape=()=>`<svg viewBox="0 0 260 150" width="280" role="img" aria-label="L-shape with a rectangle removed from one corner"><polygon class="s" points="40,20 136,20 136,52 184,52 184,116 40,116"/><text x="146" y="40">2 cm</text><text x="160" y="72" text-anchor="middle">3 cm</text><text x="112" y="136" text-anchor="middle">9 cm</text><text x="4" y="72">6 cm</text></svg>`;
+
+/* ---------- Questions: s=topic, t=text, o=options, c=correct index, w=working ---------- */
+const Q=[
+{s:'Number',t:'What is 4,508 − 2,769?',o:['1,649','1,739','1,839','2,261'],c:1,w:'4,508 − 2,700 = 1,808, then 1,808 − 69 = 1,739.'},
+{s:'Number',t:'A school buys 8 boxes of pencils. Each box holds 36 pencils. How many pencils is that altogether?',o:['244','264','278','288'],c:3,w:'8 × 36 = (8 × 30) + (8 × 6) = 240 + 48 = 288.'},
+{s:'Statistics',t:'The chart shows how many books were read each day. What is the mean number of books read per day?',o:['5','6','20','4.5'],c:0,img:barChart,w:'Total = 4 + 7 + 3 + 6 = 20. Mean = 20 ÷ 4 = 5.'},
+{s:'Fractions',t:'Which fraction is equal to 0.35?',o:['3/5','35/10','7/20','5/35'],c:2,w:'0.35 = 35/100. Divide top and bottom by 5 to get 7/20.'},
+{s:'Number',t:'Round 38,472 to the nearest thousand.',o:['39,000','38,000','38,500','40,000'],c:1,w:'The hundreds digit is 4, which is less than 5, so round down to 38,000.'},
+{s:'Percentages',t:'What is 15% of 240?',o:['36','24','32','40'],c:0,w:'10% of 240 = 24 and 5% = 12. So 15% = 24 + 12 = 36.'},
+{s:'Algebra',t:'Solve 3n + 7 = 31. What is the value of n?',o:['6','7','10','8'],c:3,w:'Subtract 7: 3n = 24. Divide by 3: n = 8.'},
+{s:'Geometry',t:'The angles of a triangle add up to 180°. What is the size of angle x?',o:['55°','75°','65°','115°'],c:2,img:triangle,w:'48° + 67° = 115°. So x = 180° − 115° = 65°.'},
+{s:'Number',t:'What is the value of 2³ + 3²?',o:['17','13','25','36'],c:0,w:'2³ = 2 × 2 × 2 = 8 and 3² = 3 × 3 = 9. So 8 + 9 = 17.'},
+{s:'Fractions',t:'Write 12/18 in its simplest form.',o:['1/2','2/3','3/4','6/9'],c:1,w:'Divide top and bottom by the highest common factor, 6: 12 ÷ 6 = 2 and 18 ÷ 6 = 3. So 2/3. (6/9 is equal but not fully simplified.)'},
+{s:'Area',t:'The L-shape is a 9 cm by 6 cm rectangle with a small rectangle cut from one corner. What is the area of the L-shape?',o:['54 cm²','42 cm²','48 cm²','60 cm²'],c:2,img:lshape,w:'Full rectangle = 9 × 6 = 54 cm². Cut-out = 3 × 2 = 6 cm². Area = 54 − 6 = 48 cm².'},
+{s:'Time',t:'A train leaves at 09:48 and arrives at 12:13. How long is the journey?',o:['2 h 15 min','2 h 35 min','3 h 25 min','2 h 25 min'],c:3,w:'09:48 to 12:00 is 2 h 12 min. Add the 13 minutes to 12:13 to get 2 h 25 min.'},
+{s:'Ratio',t:'A drink is made by mixing squash and water in the ratio 1 : 4. How much water is needed for 250 ml of squash?',o:['750 ml','1,000 ml','1,250 ml','500 ml'],c:1,w:'The water is 4 times the squash: 250 × 4 = 1,000 ml.'},
+{s:'Negative numbers',t:'The temperature is −3°C. It rises by 8°C. What is the new temperature?',o:['5°C','−11°C','11°C','−5°C'],c:0,w:'−3 + 8 = 5°C. Count up 3 to reach 0, then 5 more.'},
+{s:'Statistics',t:'What is the median of these numbers? 12, 3, 9, 7, 4',o:['9','4','7','35'],c:2,w:'Order them: 3, 4, 7, 9, 12. The middle number is 7.'},
+{s:'Perimeter',t:'A rectangle has a perimeter of 36 cm and a length of 11 cm. What is its width?',o:['25 cm','14 cm','9 cm','7 cm'],c:3,w:'Length + width = 36 ÷ 2 = 18 cm. Width = 18 − 11 = 7 cm.'},
+{s:'Number',t:'Which of these numbers is a prime number?',o:['51','57','53','55'],c:2,w:'51 = 3 × 17, 57 = 3 × 19 and 55 = 5 × 11. Only 53 has exactly two factors, 1 and itself.'},
+{s:'Fractions',t:'What is 2/3 + 1/4?',o:['3/7','11/12','3/12','2/12'],c:1,w:'Use a common denominator of 12: 8/12 + 3/12 = 11/12.'},
+{s:'Algebra',t:'If a = 5 and b = 3, what is the value of 2a − b²?',o:['1','7','16','4'],c:0,w:'2a = 10 and b² = 3 × 3 = 9. So 10 − 9 = 1.'},
+{s:'Problem solving',t:'Five identical notebooks cost ₦3,750. How much do eight of the same notebooks cost?',o:['₦4,500','₦5,250','₦6,250','₦6,000'],c:3,w:'One notebook = 3,750 ÷ 5 = ₦750. Eight notebooks = 8 × 750 = ₦6,000.'},
+{s:'Volume',t:'A cuboid measures 5 cm by 4 cm by 3 cm. What is its volume?',o:['12 cm³','47 cm³','60 cm³','94 cm³'],c:2,w:'Volume = length × width × height = 5 × 4 × 3 = 60 cm³.'},
+{s:'Fractions',t:'Which of these fractions is the greatest?',o:['3/5','7/10','5/8','2/3'],c:1,w:'As decimals: 0.6, 0.7, 0.625 and 0.667. The greatest is 7/10.'},
+{s:'Algebra',t:'The nth term of a sequence is 4n − 1. What is the 10th term?',o:['39','41','40','36'],c:0,w:'Replace n with 10: 4 × 10 − 1 = 39.'},
+{s:'Problem solving',t:'Ada saves ₦500 in week 1, then doubles the amount she saves each week. How much has she saved in total after 4 weeks?',o:['₦4,000','₦5,500','₦6,500','₦7,500'],c:3,w:'Weekly savings: 500, 1,000, 2,000, 4,000. Total = ₦7,500.'},
+{s:'Probability',t:'A bag holds 3 red, 5 blue and 2 green counters. One counter is taken at random. What is the probability that it is blue?',o:['5/3','1/5','1/2','1/10'],c:2,w:'There are 10 counters and 5 are blue. 5/10 simplifies to 1/2.'}
+];
+
+/* ---------- Rendering ---------- */
+const list=document.getElementById('list'),cnt=document.getElementById('cnt'),res=document.getElementById('res');
+const ans=[];let checked=false;
+function build(){
+ list.innerHTML='';ans.length=0;checked=false;res.textContent='';cnt.textContent='Answered: 0 / 25';
+ Q.forEach((q,i)=>{
+  const d=document.createElement('div');d.className='q';
+  d.innerHTML=`<div class="tag">${q.s}</div><p><span class="n">${i+1}</span>${q.t}</p>${q.img?q.img():''}<div class="opts">${q.o.map((o,k)=>`<button data-k="${k}"><b>${'ABCD'[k]}</b> ${o}</button>`).join('')}</div><div class="w">✔ ${q.w}</div>`;
+  d.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+   if(checked)return;
+   d.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));
+   b.classList.add('sel');ans[i]=+b.dataset.k;
+   cnt.textContent=`Answered: ${ans.filter(a=>a!==undefined).length} / 25`});
+  list.appendChild(d)});
+}
+document.getElementById('chk').onclick=()=>{
+ checked=true;let sc=0;
+ list.querySelectorAll('.q').forEach((d,i)=>{
+  d.classList.add('chk');
+  d.querySelectorAll('button').forEach((b,k)=>{b.classList.remove('sel');
+   if(k===Q[i].c)b.classList.add('ok');else if(ans[i]===k)b.classList.add('no')});
+  if(ans[i]===Q[i].c)sc++});
+ const m=sc>=22?'Excellent!':sc>=17?'Well done!':sc>=12?'Good effort, keep practising.':'Keep going, review the solutions.';
+ res.textContent=`Score: ${sc} / 25. ${m}`;
+ window.scrollTo({top:0,behavior:'smooth'});
+};
+document.getElementById('rst').onclick=()=>{build();window.scrollTo({top:0,behavior:'smooth'})};
+build();
+</script>
+</body>
+</html>
